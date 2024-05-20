@@ -65,13 +65,32 @@ fi
 # COPY 99997497
 # Time: 0000000.000 ms (00:00.000)
 
-# Load the data
-sudo -u postgres psql -t -c 'CREATE DATABASE test'
-sudo -u postgres psql test -t < create_single.sql
+# Load the data for the single Parquet file
+sudo -u postgres psql -t -c 'CREATE DATABASE test_single'
+sudo -u postgres psql test_single -t < create_single.sql
+
+# Load the data for the partitioned Parquet files
+sudo -u postgres psql -t -c 'CREATE DATABASE test_partitioned'
+sudo -u postgres psql test_partitioned -t < create_partitioned.sql
 
 echo ""
-echo "Running queries..."
-./run.sh 2>&1 | tee log.txt
+echo "Running queries for single Parquet file test..."
+./run_single.sh 2>&1 | tee log.txt
+
+# TODO: Is this correct? Are we supposed to include the Parquet file(s)?
+echo ""
+echo "Disk usage:"
+sudo du -bcs "/var/lib/postgresql/$PG_MAJOR_VERSION/main/"
+
+# 15415061091     /var/lib/postgresql/data
+# 15415061091     total
+
+cat log.txt | grep -oP 'Time: \d+\.\d+ ms' | sed -r -e 's/Time: ([0-9]+\.[0-9]+) ms/\1/' |
+    awk '{ if (i % 3 == 0) { printf "[" }; printf $1 / 1000; if (i % 3 != 2) { printf "," } else { print "]," }; ++i; }'
+
+echo ""
+echo "Running queries for partitioned Parquet files test..."
+./run_partitioned.sh 2>&1 | tee log.txt
 
 # TODO: Is this correct? Are we supposed to include the Parquet file(s)?
 echo ""
