@@ -1,7 +1,7 @@
 #!/bin/bash
 
 TRIES=3
-export PGPASSWORD='postgres'
+# export PGPASSWORD='postgres'
 
 cat queries.sql | while read query; do
     sync
@@ -9,6 +9,6 @@ cat queries.sql | while read query; do
 
     echo "$query";
     for i in $(seq 1 $TRIES); do
-    sudo -u postgres psql -t -c '\timing' -c "$query" | grep 'Time'
+        sudo -u postgres psql -t -c '\timing' -c "$query" | grep 'Time'
     done;
 done;
