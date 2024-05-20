@@ -45,8 +45,8 @@ sudo sed -i "s/^#shared_preload_libraries = .*/shared_preload_libraries = 'pg_la
 # Start Postgres
 echo ""
 echo "Starting Postgres..."
-# sudo chown -R postgres:postgres /var/lib/postgresql/16/main
-# sudo chown -R postgres:postgres /etc/postgresql/16/main
+sudo chown -R postgres:postgres /var/lib/postgresql/16/main
+sudo chown -R postgres:postgres /etc/postgresql/16/main
 
 
 
