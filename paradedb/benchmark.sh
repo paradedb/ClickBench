@@ -51,9 +51,15 @@ else
     echo "ClickBench single Parquet file dataset already downloaded, skipping..."
 fi
 
-# TODO: Also download the partitioned data
-# mkdir -p partitioned
-# seq 0 99 | xargs -P100 -I{} bash -c 'wget --no-verbose --directory-prefix partitioned --continue https://datasets.clickhouse.com/hits_compatible/athena_partitioned/hits_{}.parquet'
+# Download benchmark target data, partitioned files
+echo ""
+echo "Downloading ClickBench partitioned Parquet files dataset..."
+if [ ! -e /tmp/partitioned/ ]; then
+    mkdir -p /tmp/partitioned
+    seq 0 99 | xargs -P100 -I{} bash -c 'wget --no-verbose --directory-prefix /tmp/partitioned --continue https://datasets.clickhouse.com/hits_compatible/athena_partitioned/hits_{}.parquet'
+else
+    echo "ClickBench partitioned Parquet files dataset already downloaded, skipping..."
+fi
 
 # No data to copy, since we process the Parquet file(s) directly 
 # COPY 99997497
@@ -67,6 +73,7 @@ echo ""
 echo "Running queries..."
 ./run.sh 2>&1 | tee log.txt
 
+# TODO: Is this correct? Are we supposed to include the Parquet file(s)?
 echo ""
 echo "Disk usage:"
 sudo du -bcs "/var/lib/postgresql/$PG_MAJOR_VERSION/main/"
