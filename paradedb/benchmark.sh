@@ -70,6 +70,10 @@ fi
 # COPY 99997497
 # Time: 0000000.000 ms (00:00.000)
 
+# Load the data
+sudo -u postgres psql -t -c 'CREATE DATABASE test'
+sudo -u postgres psql test -t < create.sql
+
 echo ""
 echo "Running queries..."
 ./run.sh 2>&1 | tee log.txt
