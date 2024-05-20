@@ -40,35 +40,17 @@ sudo apt-get install -y --no-install-recommends /tmp/*.deb
 # Add pg_lakehouse to shared_preload_libraries
 echo ""
 echo "Adding pg_lakehouse to Postgres' shared_preload_libraries..."
-sudo sed -i "s/^#shared_preload_libraries = .*/shared_preload_libraries = 'pg_lakehouse'/" "/etc/postgresql/$PG_MAJOR_VERSION/main/postgresql.conf"
+# sudo sed -i "s/^#shared_preload_libraries = .*/shared_preload_libraries = 'pg_lakehouse'/" "/etc/postgresql/$PG_MAJOR_VERSION/main/postgresql.conf"
 
 # Start Postgres
 echo ""
 echo "Starting Postgres..."
-sudo chown -R postgres:postgres /var/lib/postgresql/16/main
-sudo chown -R postgres:postgres /etc/postgresql/16/main
 
-
-
-# Start PostgreSQL service
-sudo systemctl start postgresql
-
-# Enable PostgreSQL to start on boot
-sudo systemctl enable postgresql
-
-# Modify pg_hba.conf to use md5 authentication for the postgres user
-sudo sed -i "s/local   all             postgres                                peer/local   all             postgres                                md5/" /etc/postgresql/16/main/pg_hba.conf
-
-# Restart PostgreSQL service to apply changes
-sudo systemctl restart postgresql
 
 
 # sudo systemctl restart postgresql@$PG_MAJOR_VERSION-main
 sudo -u postgres pg_isready
 # sudo systemctl start postgresql
-
-export PGPASSWORD='postgres'
-sudo -u postgres psql -c "CREATE DATABASE testdb;"
 
 
 # Download benchmark target data, single file
