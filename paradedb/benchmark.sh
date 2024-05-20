@@ -29,7 +29,7 @@ echo "Installing Postgres..."
 wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
 sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
 sudo apt-get update && sudo apt-get install -y postgresql-$PG_MAJOR_VERSION postgresql-server-dev-$PG_MAJOR_VERSION
-sudo chown -R $(whoami) /usr/share/postgresql/$PG_MAJOR_VERSION/extension/ /usr/lib/postgresql/$PG_MAJOR_VERSION/lib/ /var/lib/postgresql/$PG_MAJOR_VERSION/ /usr/lib/postgresql/$PG_MAJOR_VERSION/bin/
+sudo chown -R $(whoami) /usr/share/postgresql/$PG_MAJOR_VERSION/extension/ /usr/lib/postgresql/$PG_MAJOR_VERSION/lib/ /var/lib/postgresql/$PG_MAJOR_VERSION/ /usr/lib/postgresql/$PG_MAJOR_VERSION/bin/ /etc/postgresql/$PG_MAJOR_VERSION/main
 
 # Install pg_lakehouse
 echo ""
@@ -45,9 +45,7 @@ sudo sed -i "s/^#shared_preload_libraries = .*/shared_preload_libraries = 'pg_la
 # Start Postgres
 echo ""
 echo "Starting Postgres..."
-# sudo chown -R postgres:postgres /var/lib/postgresql/16/main
-# sudo chown -R postgres:postgres /etc/postgresql/16/main
-sudo systemctl restart postgresql@16-main
+sudo systemctl restart postgresql@$PG_MAJOR_VERSION-main
 sudo -u postgres pg_isready
 # sudo systemctl start postgresql
 
