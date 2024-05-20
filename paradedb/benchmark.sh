@@ -9,9 +9,9 @@ cleanup() {
     echo ""
     echo "Cleaning up..."
     # Delete all benchmark data
-    psql -h localhost -U postgres -d postgres -p 5432 -t -c "DROP EXTENSION IF EXISTS pg_lakehouse CASCADE;"
+    # psql -h localhost -U postgres -d postgres -p 5432 -t -c "DROP EXTENSION IF EXISTS pg_lakehouse CASCADE;"
     # Stop Postgres
-    sudo systemctl stop postgresql
+    # sudo systemctl stop postgresql
     echo "Done, goodbye!"
 }
 
@@ -29,7 +29,7 @@ echo "Installing Postgres..."
 wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
 sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
 sudo apt-get update && sudo apt-get install -y postgresql-$PG_MAJOR_VERSION postgresql-server-dev-$PG_MAJOR_VERSION
-sudo chown -R $(whoami) /usr/share/postgresql/$PG_MAJOR_VERSION/extension/ /usr/lib/postgresql/$PG_MAJOR_VERSION/lib/ /var/lib/postgresql/$PG_MAJOR_VERSION/ /usr/lib/postgresql/$PG_MAJOR_VERSION/bin/ /etc/postgresql/$PG_MAJOR_VERSION/main
+# sudo chown -R $(whoami) /usr/share/postgresql/$PG_MAJOR_VERSION/extension/ /usr/lib/postgresql/$PG_MAJOR_VERSION/lib/ /var/lib/postgresql/$PG_MAJOR_VERSION/ /usr/lib/postgresql/$PG_MAJOR_VERSION/bin/ /etc/postgresql/$PG_MAJOR_VERSION/main
 
 # Install pg_lakehouse
 echo ""
