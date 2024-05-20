@@ -35,7 +35,7 @@ sudo apt-get install -y --no-install-recommends /tmp/*.deb
 # Add pg_lakehouse to shared_preload_libraries
 echo ""
 echo "Adding pg_lakehouse to Postgres' shared_preload_libraries..."
-# sudo sed -i "s/^#shared_preload_libraries = .*/shared_preload_libraries = 'pg_lakehouse'/" "/etc/postgresql/$PG_MAJOR_VERSION/main/postgresql.conf"
+sudo sed -i "s/^#shared_preload_libraries = .*/shared_preload_libraries = 'pg_lakehouse'/" "/etc/postgresql/$PG_MAJOR_VERSION/main/postgresql.conf"
 
 # Start Postgres
 echo ""
