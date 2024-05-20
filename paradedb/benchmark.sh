@@ -70,6 +70,9 @@ fi
 # COPY 99997497
 # Time: 0000000.000 ms (00:00.000)
 
+sudo -i -u postgres
+
+
 echo ""
 echo "Running queries..."
 ./run.sh 2>&1 | tee log.txt
