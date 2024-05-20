@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Variables
-PARADEDB_VERSION=0.7.0
+PARADEDB_VERSION=0.7.1
 PG_MAJOR_VERSION=16
 
 # Cleanup function to reset the environment
