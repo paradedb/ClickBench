@@ -19,32 +19,42 @@ cleanup() {
 trap cleanup EXIT
 
 # Update the system
+echo ""
+echo "Updating system..."
 sudo apt-get update
 
 ## Install Postgres
+echo ""
+echo "Installing Postgres..."
 wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
 sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
 sudo apt-get update && sudo apt-get install -y postgresql-$PG_MAJOR_VERSION postgresql-server-dev-$PG_MAJOR_VERSION
 sudo chown -R $(whoami) /usr/share/postgresql/$PG_MAJOR_VERSION/extension/ /usr/lib/postgresql/$PG_MAJOR_VERSION/lib/ /var/lib/postgresql/$PG_MAJOR_VERSION/ /usr/lib/postgresql/$PG_MAJOR_VERSION/bin/
 
 # Install pg_lakehouse
+echo ""
+echo "Installing ParadeDB pg_lakehouse..."
 curl -L "https://github.com/paradedb/paradedb/releases/download/v$PARADEDB_VERSION/pg_lakehouse-v$PARADEDB_VERSION-pg$PG_MAJOR_VERSION-amd64-ubuntu2204.deb" -o /tmp/pg_lakehouse.deb 
 sudo apt-get install -y --no-install-recommends /tmp/*.deb
 
 # Add pg_lakehouse to shared_preload_libraries
-sed -i "s/^#shared_preload_libraries = .*/shared_preload_libraries = 'pg_lakehouse'/" "/etc/postgresql/$PG_MAJOR_VERSION/main/postgresql.conf"
+echo ""
+echo "Adding pg_lakehouse to Postgres' shared_preload_libraries..."
+sudo sed -i "s/^#shared_preload_libraries = .*/shared_preload_libraries = 'pg_lakehouse'/" "/etc/postgresql/$PG_MAJOR_VERSION/main/postgresql.conf"
 
 # Start Postgres
+echo ""
+echo "Starting Postgres..."
 sudo systemctl start postgresql
 
 # Download benchmark target data, single file
 if [ ! -e hits.parquet ]; then
     echo ""
-    echo "Downloading dataset..."
+    echo "Downloading ClickBench single Parquet file dataset..."
     wget --no-verbose --continue https://datasets.clickhouse.com/hits_compatible/hits.parquet
 else
     echo ""
-    echo "Dataset already downloaded, skipping..."
+    echo "ClickBench single Parquet file dataset already downloaded, skipping..."
 fi
 
 # TODO: Also download the partitioned data
