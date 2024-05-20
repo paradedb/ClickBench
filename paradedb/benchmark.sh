@@ -18,18 +18,13 @@ cleanup() {
 # Register the cleanup function to run when the script exits
 trap cleanup EXIT
 
-# Update the system
-echo ""
-echo "Updating system..."
-sudo apt-get update
-
 ## Install Postgres
 echo ""
 echo "Installing Postgres..."
 wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
 sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
-sudo apt-get update && sudo apt-get install -y postgresql-$PG_MAJOR_VERSION postgresql-server-dev-$PG_MAJOR_VERSION
-# sudo chown -R $(whoami) /usr/share/postgresql/$PG_MAJOR_VERSION/extension/ /usr/lib/postgresql/$PG_MAJOR_VERSION/lib/ /var/lib/postgresql/$PG_MAJOR_VERSION/ /usr/lib/postgresql/$PG_MAJOR_VERSION/bin/ /etc/postgresql/$PG_MAJOR_VERSION/main
+sudo apt-get update
+sudo apt-get install -y postgresql-$PG_MAJOR_VERSION postgresql-server-dev-$PG_MAJOR_VERSION
 
 # Install pg_lakehouse
 echo ""
@@ -45,13 +40,7 @@ echo "Adding pg_lakehouse to Postgres' shared_preload_libraries..."
 # Start Postgres
 echo ""
 echo "Starting Postgres..."
-
-
-
-# sudo systemctl restart postgresql@$PG_MAJOR_VERSION-main
 sudo -u postgres pg_isready
-# sudo systemctl start postgresql
-
 
 # Download benchmark target data, single file
 echo ""
@@ -72,7 +61,7 @@ fi
 
 # Load the data
 sudo -u postgres psql -t -c 'CREATE DATABASE test'
-sudo -u postgres psql test -t < create.sql
+sudo -u postgres psql test -t < create_single.sql
 
 echo ""
 echo "Running queries..."
