@@ -37,9 +37,14 @@ echo ""
 echo "Adding pg_lakehouse to Postgres' shared_preload_libraries..."
 sudo sed -i "s/^#shared_preload_libraries = .*/shared_preload_libraries = 'pg_lakehouse'/" "/etc/postgresql/$PG_MAJOR_VERSION/main/postgresql.conf"
 
-# Start Postgres
+## TODO: Restart postgres
 echo ""
-echo "Starting Postgres..."
+echo "Restart Postgres..."
+sudo systemctl restart postgresql
+
+# Start Postgres
+# echo ""
+# echo "Starting Postgres..."
 sudo -u postgres pg_isready
 
 # Download benchmark target data, single file
