@@ -8,7 +8,6 @@ cat queries.sql | while read query; do
 
     echo "$query";
     for i in $(seq 1 $TRIES); do
-        sudo -u postgres psql test_single -t -c '\timing' -c "$query"
-        # | grep 'Time'
+        sudo -u postgres psql test_single -t -c '\timing' -c "$query" | grep 'Time'
     done;
 done;
