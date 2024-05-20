@@ -56,15 +56,15 @@ else
     echo "ClickBench single Parquet file dataset already downloaded, skipping..."
 fi
 
-# Download benchmark target data, partitioned files
-echo ""
-echo "Downloading ClickBench partitioned Parquet files dataset..."
-if [ ! -e /tmp/partitioned/ ]; then
-    mkdir -p /tmp/partitioned
-    seq 0 99 | xargs -P100 -I{} bash -c 'wget --no-verbose --directory-prefix /tmp/partitioned --continue https://datasets.clickhouse.com/hits_compatible/athena_partitioned/hits_{}.parquet'
-else
-    echo "ClickBench partitioned Parquet files dataset already downloaded, skipping..."
-fi
+# # Download benchmark target data, partitioned files
+# echo ""
+# echo "Downloading ClickBench partitioned Parquet files dataset..."
+# if [ ! -e /tmp/partitioned/ ]; then
+#     mkdir -p /tmp/partitioned
+#     seq 0 99 | xargs -P100 -I{} bash -c 'wget --no-verbose --directory-prefix /tmp/partitioned --continue https://datasets.clickhouse.com/hits_compatible/athena_partitioned/hits_{}.parquet'
+# else
+#     echo "ClickBench partitioned Parquet files dataset already downloaded, skipping..."
+# fi
 
 # No data to copy, since we process the Parquet file(s) directly 
 # COPY 99997497
@@ -93,17 +93,17 @@ sudo du -bcs "/var/lib/postgresql/$PG_MAJOR_VERSION/main/"
 cat log.txt | grep -oP 'Time: \d+\.\d+ ms' | sed -r -e 's/Time: ([0-9]+\.[0-9]+) ms/\1/' |
     awk '{ if (i % 3 == 0) { printf "[" }; printf $1 / 1000; if (i % 3 != 2) { printf "," } else { print "]," }; ++i; }'
 
-echo ""
-echo "Running queries for partitioned Parquet files test..."
-./run_partitioned.sh 2>&1 | tee log.txt
+# echo ""
+# echo "Running queries for partitioned Parquet files test..."
+# ./run_partitioned.sh 2>&1 | tee log.txt
 
-# TODO: Is this correct? Are we supposed to include the Parquet file(s)?
-echo ""
-echo "Disk usage:"
-sudo du -bcs "/var/lib/postgresql/$PG_MAJOR_VERSION/main/"
+# # TODO: Is this correct? Are we supposed to include the Parquet file(s)?
+# echo ""
+# echo "Disk usage:"
+# sudo du -bcs "/var/lib/postgresql/$PG_MAJOR_VERSION/main/"
 
-# 15415061091     /var/lib/postgresql/data
-# 15415061091     total
+# # 15415061091     /var/lib/postgresql/data
+# # 15415061091     total
 
-cat log.txt | grep -oP 'Time: \d+\.\d+ ms' | sed -r -e 's/Time: ([0-9]+\.[0-9]+) ms/\1/' |
-    awk '{ if (i % 3 == 0) { printf "[" }; printf $1 / 1000; if (i % 3 != 2) { printf "," } else { print "]," }; ++i; }'
+# cat log.txt | grep -oP 'Time: \d+\.\d+ ms' | sed -r -e 's/Time: ([0-9]+\.[0-9]+) ms/\1/' |
+#     awk '{ if (i % 3 == 0) { printf "[" }; printf $1 / 1000; if (i % 3 != 2) { printf "," } else { print "]," }; ++i; }'
