@@ -80,7 +80,8 @@ sudo -u postgres psql test_partitioned -t < create_partitioned.sql
 
 echo ""
 echo "Running queries for single Parquet file test..."
-./run_single.sh 2>&1 | tee log.txt
+./run_single.sh
+#2>&1 | tee log.txt
 
 # TODO: Is this correct? Are we supposed to include the Parquet file(s)?
 echo ""
