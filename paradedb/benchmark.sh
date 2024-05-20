@@ -45,15 +45,18 @@ sudo sed -i "s/^#shared_preload_libraries = .*/shared_preload_libraries = 'pg_la
 # Start Postgres
 echo ""
 echo "Starting Postgres..."
-sudo systemctl start postgresql
+sudo chown -R postgres:postgres /var/lib/postgresql/16/main
+sudo chown -R postgres:postgres /etc/postgresql/16/main
+sudo systemctl restart postgresql@16-main
+sudo -u postgres pg_isready
+# sudo systemctl start postgresql
 
 # Download benchmark target data, single file
+echo ""
+echo "Downloading ClickBench single Parquet file dataset..."
 if [ ! -e hits.parquet ]; then
-    echo ""
-    echo "Downloading ClickBench single Parquet file dataset..."
     wget --no-verbose --continue https://datasets.clickhouse.com/hits_compatible/hits.parquet
 else
-    echo ""
     echo "ClickBench single Parquet file dataset already downloaded, skipping..."
 fi
 
