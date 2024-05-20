@@ -3,6 +3,8 @@
 TRIES=3
 export PGPASSWORD='postgres'
 
+sudo -i -u postgres
+
 cat queries.sql | while read query; do
     sync
     echo 3 | sudo tee /proc/sys/vm/drop_caches
