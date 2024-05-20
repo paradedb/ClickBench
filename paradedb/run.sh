@@ -8,6 +8,6 @@ cat queries.sql | while read query; do
 
     echo "$query";
     for i in $(seq 1 $TRIES); do
-        PGPASSWORD=postgres psql -h localhost -U postgres -d postgres -t -c '\timing' -c "$query" | grep 'Time'
+        psql -h localhost -U postgres -d postgres -t -c '\timing' -c "$query" | grep 'Time'
     done;
 done;
