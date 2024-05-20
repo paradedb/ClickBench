@@ -1,29 +1,12 @@
+-- Ensure pg_lakehouse is latest
 DROP EXTENSION IF EXISTS pg_lakehouse CASCADE;
 CREATE EXTENSION IF NOT EXISTS pg_lakehouse;
-DROP FOREIGN DATA WRAPPER IF EXISTS local_file_wrapper CASCADE;
-DO $$
-BEGIN
-   IF NOT EXISTS (
-      SELECT 1
-      FROM pg_foreign_data_wrapper
-      WHERE fdwname = 'local_file_wrapper'
-   ) THEN
-      CREATE FOREIGN DATA WRAPPER local_file_wrapper
-         HANDLER local_file_fdw_handler
-         VALIDATOR local_file_fdw_validator;
-   END IF;
-END $$;
-DO $$
-BEGIN
-   IF NOT EXISTS (
-      SELECT 1
-      FROM pg_foreign_server
-      WHERE srvname = 'local_file_server'
-   ) THEN
-      CREATE SERVER local_file_server
-         FOREIGN DATA WRAPPER local_file_wrapper;
-   END IF;
-END $$;
+
+-- Create the pg_lakehouse local file wrapper
+CREATE FOREIGN DATA WRAPPER local_file_wrapper HANDLER local_file_fdw_handler VALIDATOR local_file_fdw_validator;
+CREATE SERVER local_file_server FOREIGN DATA WRAPPER local_file_wrapper;
+
+-- Create the pg_lakehouse table
 CREATE FOREIGN TABLE IF NOT EXISTS hits
 (
     "WatchID" BIGINT NOT NULL,
@@ -131,8 +114,6 @@ CREATE FOREIGN TABLE IF NOT EXISTS hits
     "RefererHash" BIGINT NOT NULL,
     "URLHash" BIGINT NOT NULL,
     "CLID" INTEGER NOT NULL
-    -- Note: Primary key constraints are not supported on foreign tables
-    -- PRIMARY KEY (CounterID, EventDate, UserID, EventTime, WatchID)
 )
 SERVER local_file_server
 OPTIONS (path 'file://{file_path}', extension 'parquet');
