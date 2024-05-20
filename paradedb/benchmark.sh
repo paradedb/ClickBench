@@ -67,6 +67,7 @@ sudo systemctl restart postgresql
 sudo -u postgres pg_isready
 # sudo systemctl start postgresql
 
+export PGPASSWORD='postgres'
 sudo -u postgres psql -c "CREATE DATABASE testdb;"
 
 
