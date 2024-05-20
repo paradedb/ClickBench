@@ -57,7 +57,7 @@ sudo -u postgres pg_isready
 echo ""
 echo "Downloading ClickBench single Parquet file dataset..."
 if [ ! -e /tmp/hits.parquet ]; then
-    wget --no-verbose --continue -O /tmp/ https://datasets.clickhouse.com/hits_compatible/hits.parquet 
+    wget --no-verbose --continue -O /tmp/hits.parquet https://datasets.clickhouse.com/hits_compatible/hits.parquet 
 else
     echo "ClickBench single Parquet file dataset already downloaded, skipping..."
 fi
