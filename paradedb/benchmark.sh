@@ -56,7 +56,7 @@ sudo -u postgres pg_isready
 # Download benchmark target data, single file
 echo ""
 echo "Downloading ClickBench single Parquet file dataset..."
-if [ ! -e hits.parquet ]; then
+if [ ! -e /tmp/hits.parquet ]; then
     wget --no-verbose --continue -O /tmp/ https://datasets.clickhouse.com/hits_compatible/hits.parquet 
 else
     echo "ClickBench single Parquet file dataset already downloaded, skipping..."
