@@ -46,6 +46,7 @@ sudo systemctl restart postgresql
 # Start Postgres
 # echo ""
 # echo "Starting Postgres..."
+sleep 5
 sudo -u postgres pg_isready
 
 # Download benchmark target data, single file
