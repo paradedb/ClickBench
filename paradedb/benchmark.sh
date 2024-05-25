@@ -10,7 +10,7 @@ cleanup() {
     echo ""
     echo "Cleaning up..."
     # Delete all benchmark data
-    # psql -h localhost -U postgres -d postgres -p 5432 -t -c "DROP EXTENSION IF EXISTS pg_search CASCADE;"
+    # psql -h localhost -U postgres -d postgres -p 5432 -t -c "DROP EXTENSION IF EXISTS pg_lakehouse CASCADE;"
     # Stop Postgres
     # sudo systemctl stop postgresql
     echo "Done, goodbye!"
@@ -32,22 +32,17 @@ echo ""
 echo "Starting Postgres..."
 sudo systemctl start postgresql
 
-# Install pg_search
+# Install pg_lakehouse
 echo ""
-echo "Installing ParadeDB pg_search..."
-curl -L "https://github.com/paradedb/paradedb/releases/download/v$PARADEDB_VERSION/pg_search-v$PARADEDB_VERSION-pg$PG_MAJOR_VERSION-amd64-ubuntu2204.deb" -o /tmp/pg_search.deb 
+echo "Installing ParadeDB pg_lakehouse..."
+curl -L "https://github.com/paradedb/paradedb/releases/download/v$PARADEDB_VERSION/pg_lakehouse-v$PARADEDB_VERSION-pg$PG_MAJOR_VERSION-amd64-ubuntu2204.deb" -o /tmp/pg_lakehouse.deb 
 sudo apt-get install -y --no-install-recommends /tmp/*.deb
 
-# Add pg_search to shared_preload_libraries
+# Add pg_lakehouse to shared_preload_libraries
 echo ""
-echo "Adding pg_search to Postgres' shared_preload_libraries..."
-sudo sed -i "s/^#shared_preload_libraries = .*/shared_preload_libraries = 'pg_search'/" "/etc/postgresql/$PG_MAJOR_VERSION/main/postgresql.conf"
+echo "Adding pg_lakehouse to Postgres' shared_preload_libraries..."
+sudo sed -i "s/^#shared_preload_libraries = .*/shared_preload_libraries = 'pg_lakehouse'/" "/etc/postgresql/$PG_MAJOR_VERSION/main/postgresql.conf"
 
-sudo sed -i "s/^#*log_min_messages.*/log_min_messages = 'DEBUG5'/" /etc/postgresql/$PG_MAJOR_VERSION/main/postgresql.conf
-sudo sed -i "s/^#*log_statement.*/log_statement = 'all'/" /etc/postgresql/$PG_MAJOR_VERSION/main/postgresql.conf
-sudo sed -i "s/^#*log_duration.*/log_duration = on/" /etc/postgresql/$PG_MAJOR_VERSION/main/postgresql.conf
-sudo sed -i "s/^#*log_min_duration_statement.*/log_min_duration_statement = 0/" /etc/postgresql/$PG_MAJOR_VERSION/main/postgresql.conf
-sudo sed -i "s/^#*log_error_verbosity.*/log_error_verbosity = verbose/" /etc/postgresql/$PG_MAJOR_VERSION/main/postgresql.conf
 
 
 

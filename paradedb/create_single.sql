@@ -1,13 +1,13 @@
--- Ensure pg_search is latest
-DROP EXTENSION IF EXISTS pg_search CASCADE;
-CREATE EXTENSION IF NOT EXISTS pg_search;
+-- Ensure pg_lakehouse is latest
+DROP EXTENSION IF EXISTS pg_lakehouse CASCADE;
+CREATE EXTENSION IF NOT EXISTS pg_lakehouse;
 
--- -- Create the pg_search local file wrapper
--- CREATE FOREIGN DATA WRAPPER local_file_wrapper HANDLER local_file_fdw_handler VALIDATOR local_file_fdw_validator;
--- CREATE SERVER local_file_server FOREIGN DATA WRAPPER local_file_wrapper;
+-- Create the pg_lakehouse local file wrapper
+CREATE FOREIGN DATA WRAPPER local_file_wrapper HANDLER local_file_fdw_handler VALIDATOR local_file_fdw_validator;
+CREATE SERVER local_file_server FOREIGN DATA WRAPPER local_file_wrapper;
 
--- Create the pg_search table
-CREATE TABLE IF NOT EXISTS hits
+-- Create the pg_lakehouse table
+CREATE FOREIGN TABLE IF NOT EXISTS hits
 (
     "WatchID" BIGINT NOT NULL,
     "JavaEnable" SMALLINT NOT NULL,
@@ -114,6 +114,6 @@ CREATE TABLE IF NOT EXISTS hits
     "RefererHash" BIGINT NOT NULL,
     "URLHash" BIGINT NOT NULL,
     "CLID" INTEGER NOT NULL
-);
--- SERVER local_file_server
--- OPTIONS (path 'file:///tmp/hits.parquet', extension 'parquet');
+)
+SERVER local_file_server
+OPTIONS (path 'file:///tmp/hits.parquet', extension 'parquet');
