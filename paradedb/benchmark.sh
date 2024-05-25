@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # Variables
-DEBIAN_FRONTEND=noninteractive
-PARADEDB_VERSION=0.7.2
-PG_MAJOR_VERSION=16
+export DEBIAN_FRONTEND=noninteractive
+export PARADEDB_VERSION=0.7.2
+export PG_MAJOR_VERSION=16
 
 # Cleanup function to reset the environment
 cleanup() {
@@ -41,7 +41,15 @@ sudo apt-get install -y --no-install-recommends /tmp/*.deb
 # Add pg_lakehouse to shared_preload_libraries
 echo ""
 echo "Adding pg_lakehouse to Postgres' shared_preload_libraries..."
-# sudo sed -i "s/^#shared_preload_libraries = .*/shared_preload_libraries = 'pg_lakehouse'/" "/etc/postgresql/$PG_MAJOR_VERSION/main/postgresql.conf"
+sudo sed -i "s/^#shared_preload_libraries = .*/shared_preload_libraries = 'pg_lakehouse'/" "/etc/postgresql/$PG_MAJOR_VERSION/main/postgresql.conf"
+
+sudo sed -i "s/^#*log_min_messages.*/log_min_messages = 'DEBUG5'/" /etc/postgresql/$PG_MAJOR_VERSION/main/postgresql.conf
+sudo sed -i "s/^#*log_statement.*/log_statement = 'all'/" /etc/postgresql/$PG_MAJOR_VERSION/main/postgresql.conf
+sudo sed -i "s/^#*log_duration.*/log_duration = on/" /etc/postgresql/$PG_MAJOR_VERSION/main/postgresql.conf
+sudo sed -i "s/^#*log_min_duration_statement.*/log_min_duration_statement = 0/" /etc/postgresql/$PG_MAJOR_VERSION/main/postgresql.conf
+sudo sed -i "s/^#*log_error_verbosity.*/log_error_verbosity = verbose/" /etc/postgresql/$PG_MAJOR_VERSION/main/postgresql.conf
+
+
 
 echo ""
 echo "Restarting Postgres..."
