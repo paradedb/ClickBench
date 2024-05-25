@@ -55,7 +55,7 @@ sudo -u postgres pg_isready
 # We use the postgres user for simplicity
 echo ""
 echo "Give permissions to postgres user"
-sudo chmod o+x /home/ubuntu
+sudo chmod o+x /tmp/
 
 
 # Download benchmark target data, single file
