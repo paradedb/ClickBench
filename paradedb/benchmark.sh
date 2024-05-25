@@ -51,11 +51,18 @@ echo "Restarting Postgres..."
 sudo systemctl restart postgresql
 sudo -u postgres pg_isready
 
+
+# We use the postgres user for simplicity
+echo ""
+echo "Give permissions to postgres user"
+sudo chmod o+x /home/ubuntu
+
+
 # Download benchmark target data, single file
 echo ""
 echo "Downloading ClickBench single Parquet file dataset..."
-if [ ! -e ~/hits.parquet ]; then
-    wget --no-verbose --continue -O ~/hits.parquet https://datasets.clickhouse.com/hits_compatible/hits.parquet 
+if [ ! -e /tmp/hits.parquet ]; then
+    wget --no-verbose --continue -O /tmp/hits.parquet https://datasets.clickhouse.com/hits_compatible/hits.parquet 
 else
     echo "ClickBench single Parquet file dataset already downloaded, skipping..."
 fi
@@ -75,14 +82,10 @@ fi
 # Time: 0000000.000 ms (00:00.000)
 
 # Load the data for the single Parquet file
-
-
-sudo -u postgres psql -t -c 'CREATE ROLE ubuntu WITH LOGIN;'
-
 echo ""
 echo "Creating the database..."
-psql -t -c 'CREATE DATABASE test_single'
-psql test_single -t < create_single.sql
+sudo -u postgres psql -t -c 'CREATE DATABASE test_single'
+sudo -u postgres psql test_single -t < create_single.sql
 
 # # Load the data for the partitioned Parquet files
 # sudo -u postgres psql -t -c 'CREATE DATABASE test_partitioned'
