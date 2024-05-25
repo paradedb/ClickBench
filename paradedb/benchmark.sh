@@ -27,6 +27,11 @@ sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs
 sudo apt-get update
 sudo apt-get install -y postgresql-$PG_MAJOR_VERSION postgresql-server-dev-$PG_MAJOR_VERSION
 
+## Start Postgres
+echo ""
+echo "Starting Postgres..."
+sudo systemctl start postgresql
+
 # Install pg_lakehouse
 echo ""
 echo "Installing ParadeDB pg_lakehouse..."
@@ -36,17 +41,11 @@ sudo apt-get install -y --no-install-recommends /tmp/*.deb
 # Add pg_lakehouse to shared_preload_libraries
 echo ""
 echo "Adding pg_lakehouse to Postgres' shared_preload_libraries..."
-sudo sed -i "s/^#shared_preload_libraries = .*/shared_preload_libraries = 'pg_lakehouse'/" "/etc/postgresql/$PG_MAJOR_VERSION/main/postgresql.conf"
+# sudo sed -i "s/^#shared_preload_libraries = .*/shared_preload_libraries = 'pg_lakehouse'/" "/etc/postgresql/$PG_MAJOR_VERSION/main/postgresql.conf"
 
-## TODO: Restart postgres
 echo ""
-echo "Restart Postgres..."
+echo "Restarting Postgres..."
 sudo systemctl restart postgresql
-
-# Start Postgres
-# echo ""
-# echo "Starting Postgres..."
-sleep 5
 sudo -u postgres pg_isready
 
 # Download benchmark target data, single file
