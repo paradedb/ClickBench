@@ -76,9 +76,9 @@ fi
 sudo -u postgres psql -t -c 'CREATE DATABASE test_single'
 sudo -u postgres psql test_single -t < create_single.sql
 
-# Load the data for the partitioned Parquet files
-sudo -u postgres psql -t -c 'CREATE DATABASE test_partitioned'
-sudo -u postgres psql test_partitioned -t < create_partitioned.sql
+# # Load the data for the partitioned Parquet files
+# sudo -u postgres psql -t -c 'CREATE DATABASE test_partitioned'
+# sudo -u postgres psql test_partitioned -t < create_partitioned.sql
 
 echo ""
 echo "Running queries for single Parquet file test..."
