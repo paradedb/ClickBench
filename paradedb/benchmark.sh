@@ -75,6 +75,8 @@ fi
 # Time: 0000000.000 ms (00:00.000)
 
 # Load the data for the single Parquet file
+echo ""
+echo "Creating the database..."
 sudo -u postgres psql -t -c 'CREATE DATABASE test_single'
 sudo -u postgres psql test_single -t < create_single.sql
 
