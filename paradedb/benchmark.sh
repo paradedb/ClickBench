@@ -2,8 +2,8 @@
 
 # Variables
 export DEBIAN_FRONTEND=noninteractive
-export PARADEDB_VERSION=0.7.2
-export PG_MAJOR_VERSION=16
+PARADEDB_VERSION=0.7.2
+PG_MAJOR_VERSION=16
 
 # Cleanup function to reset the environment
 cleanup() {
@@ -84,8 +84,8 @@ fi
 # Load the data for the single Parquet file
 echo ""
 echo "Creating the database..."
-sudo -u postgres psql -t -c 'CREATE DATABASE test_single'
-sudo -u postgres psql test_single -t < create_single.sql
+sudo -u postgres psql -t -c 'CREATE DATABASE test'
+sudo -u postgres psql test -t < create.sql
 
 # # Load the data for the partitioned Parquet files
 # sudo -u postgres psql -t -c 'CREATE DATABASE test_partitioned'
@@ -93,7 +93,7 @@ sudo -u postgres psql test_single -t < create_single.sql
 
 echo ""
 echo "Running queries for single Parquet file test..."
-./run_single.sh 2>&1 | tee log.txt
+./run.sh 2>&1 | tee log.txt
 
 # TODO: Is this correct? Are we supposed to include the Parquet file(s)?
 echo ""
