@@ -1,12 +1,18 @@
-CALL paradedb.init();
-CREATE TABLE IF NOT EXISTS hits
+CREATE FOREIGN DATA WRAPPER parquet_wrapper
+    HANDLER parquet_fdw_handler
+    VALIDATOR parquet_fdw_validator;
+
+CREATE SERVER parquet_server
+    FOREIGN DATA WRAPPER parquet_wrapper;
+
+CREATE FOREIGN TABLE IF NOT EXISTS hits
 (
     WatchID BIGINT NOT NULL,
     JavaEnable SMALLINT NOT NULL,
     Title TEXT NOT NULL,
     GoodEvent SMALLINT NOT NULL,
-    EventTime TIMESTAMP NOT NULL,
-    EventDate Date NOT NULL,
+    EventTime BIGINT NOT NULL,
+    EventDate INTEGER NOT NULL,
     CounterID INTEGER NOT NULL,
     ClientIP INTEGER NOT NULL,
     RegionID INTEGER NOT NULL,
@@ -46,7 +52,7 @@ CREATE TABLE IF NOT EXISTS hits
     WindowClientWidth SMALLINT NOT NULL,
     WindowClientHeight SMALLINT NOT NULL,
     ClientTimeZone SMALLINT NOT NULL,
-    ClientEventTime TIMESTAMP NOT NULL,
+    ClientEventTime BIGINT NOT NULL,
     SilverlightVersion1 SMALLINT NOT NULL,
     SilverlightVersion2 SMALLINT NOT NULL,
     SilverlightVersion3 INTEGER NOT NULL,
@@ -65,7 +71,7 @@ CREATE TABLE IF NOT EXISTS hits
     DontCountHits SMALLINT NOT NULL,
     WithHash SMALLINT NOT NULL,
     HitColor CHAR NOT NULL,
-    LocalEventTime TIMESTAMP NOT NULL,
+    LocalEventTime BIGINT NOT NULL,
     Age SMALLINT NOT NULL,
     Sex SMALLINT NOT NULL,
     Income SMALLINT NOT NULL,
@@ -104,6 +110,7 @@ CREATE TABLE IF NOT EXISTS hits
     FromTag TEXT NOT NULL,
     HasGCLID SMALLINT NOT NULL,
     RefererHash BIGINT NOT NULL,
-    URLHash BIGINT NOT NULL,
-    CLID INTEGER NOT NULL
-) USING deltalake;
+    URLHash BIGINT NOT NULL
+)
+SERVER parquet_server
+OPTIONS (files '/tmp/hits.parquet');
