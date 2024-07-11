@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PARADEDB_VERSION=0.8.1
+PARADEDB_VERSION=0.8.4
 FLAG_WORKLOAD=single
 
 usage() {
